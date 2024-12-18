@@ -1,0 +1,245 @@
+//Backend crash course
+
+I. Setup (folder structure)
+
+1. Create a new repo in github with your project name
+
+2. Get on terminal
+
+3. cd
+
+4. git clone repo_url
+
+5. cd repoName
+
+6. mkdir client server
+
+7. cd server
+
+8. npm init -y
+
+9. npm i express config mongoose jsonwebtoken bcrypt axios 
+
+10. mkdir controllers models utils config
+
+11. cd config
+touch default.json
+Add this code in default.json
+...
+{
+  "PORT": 5001,
+  "DB_URL": "your connection url/dbName"
+}
+
+12. cd ..
+
+13. touch app.js .gitignore
+
+14. add node_modules and config in .gitignore
+
+15. open your package.json and add type:module and start nodemon app.js
+if nodemon not found ; npm i -g nodemon
+
+16. Come back to app.js
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+II- Express and DB Setup:
+
+1. make sure your config has DB_URL with a new db name
+...
+{
+  "PORT": 5001,
+  "DB_URL": "your connection url/dbName"
+}
+...
+
+2. come back to main folder level 
+
+3. cd utils
+
+4. touch dbConnect.js
+Add this code below in file
+...
+
+import mongoose from "mongoose"
+import config from "config"
+
+async function connect(){
+  try{
+    let dbUrl = config.get("DB_URL")
+    await mongoose.connect(dbUrl)
+    console.log("Database connected succesfully")
+
+  } catch (error){
+    console.log(error)
+  }
+
+}
+connect()
+
+...
+
+5. now back to app.js
+
+Add this code 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import express from 'express'
+import config from 'config'
+
+import "./utils/dbConnect.js"
+
+const app = express()
+const PORT= config.get("PORT")
+
+app.use(express.json())
+
+//make a hello world api
+
+app.get("/", (req,res) => {
+  try{
+    res.status(200).json({msg: "Hello World!"})
+  } catch (error){
+    console.log(error)
+    res.status(500).json({msg: error})
+  }
+})
+
+app.listen(PORT, () => {
+  console.log(`Server is up and running at ${PORT}`)
+})
+
+6. Now run the server
+npm start 
+
+//make sure you see 
+Server is up and running and Database connected succesfully
+
+III- Express Routing Setup
+
+1. make sure you have controllers folder
+
+2. cd controllers
+
+//create your subfolders according to your project ; ex: users, admins, staff
+
+3. mkdir users admins staff
+
+4. cd users && touch index.js
+
+5. cd .. && cd staff && touch index.js
+
+6. cd .. && cd admin && touch index.js
+
+7. In users folder in index.js
+add this code 
+...
+import express from 'express'
+
+const router = express.Router()
+
+router.post("/getallusers", (req,res) =>{
+  try{
+    console.log("Get all users")
+    res.status(200).json({msg: "Get all users"})
+
+  }
+  catch (error) {
+    console.log(error)
+    res.status(500).json({msg: error})
+  }
+})
+
+router.post("/register", (req,res) => {
+  try{
+    let userInput = req.body
+    console.log(userInput)
+    res.status(200).json(userInput)
+
+  } catch (error){
+    console.log(error)
+    res.status(500).json({msg: error})
+  }
+})
+
+export default router;
+
+////////////////////////////////////////////
+
+IV: Model Mongoose Setup
+
+1. make sure you have models folder
+
+2. create subfolders according to your projects (caps first letter) (Admin Staff Users)
+
+3. mkdir Users Admins Staff
+
+4. cd Users && touch Users.js
+
+5. cd .. && cd Staff && touch Staff.js
+
+6. cd .. && cd Admin && touch Admin.js && cd..
+
+///////////////////////////////////////////////////////////////////////////
+
+V: Routing Import export
+
+1. Make sure your controllers/users/folder has const router = express.Router() and export default router
+
+2. now back to app.js
+add this below code 
+...
+import express from 'express'
+import config from 'config'
+
+import "./utils/dbConnect.js"
+
+//Import routing here
+
+import userRouter from "./controllers/users/index.js"
+import adminsRouter from "./controllers/admins/index.js"
+import staffRouter from "./controllers/staff/index.js"
+
+const app = express()
+const PORT= config.get("PORT")
+
+app.use(express.json())
+
+//make a hello world api
+
+app.get("/", (req,res) => {
+  try{
+    res.status(200).json({msg: "Hello World!"})
+  } catch (error){
+    console.log(error)
+    res.status(500).json({msg: error})
+  }
+})
+
+app.use("/api/user", userRouter)
+app.use("/api/admins", adminsRouter)
+app.use("/api/staff", staffRouter)
+
+
+
+app.listen(PORT, () => {
+  console.log(`Server is up and running at ${PORT}`)
+})
+...
+
+VI. Model Setup:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
