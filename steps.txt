@@ -284,6 +284,8 @@ router.post("/register", async (req, res) => {
 3. test it in postman and check if it gets updated in the database
 
 (i hope i didnt forget anything in these steps)
+(if i missed anything then 
+https://github.com/saadhn4/mongooseSetup -> this repository i can follow from models and controllers folder ; were mainly working with these both)
 
 
 
