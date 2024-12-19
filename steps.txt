@@ -230,6 +230,63 @@ app.listen(PORT, () => {
 
 VI. Model Setup:
 
+1. Now im working with models folder ; make sure you have the necessary subfolders Admin, Staff, Users
+and inside them their respective .js file (Admin.js, Index.js, Staff.js)
+{inside these 3 subfolders we will be defining the schema, model and export default model}
+The code usually looks similar to this:
+...
+import mongoose from "mongoose";
+
+const userSchema = new mongoose.Schema({
+  firstName: {
+    type: String,
+    required: true,
+    maxlength: 50,
+    minlength: 2,
+  },
+
+  lastName: {
+    type: String,
+    required: true,
+    maxlength: 50,
+    minlength: 2,
+  },
+
+  phone: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+});
+
+//3 parameters (customName,schemaName,collectionName)
+let userModel = mongoose.model("Users", userSchema, "Users");
+
+export default userModel;
+...
+
+2. Now come back to the controllers folders ; inside it (since this is the user model, im in users/index.js)
+import userModel from "../../models/Users/Users.js";
+
+//creating a register api using create method(insertOne)
+router.post("/register", async (req, res) => {
+  try {
+    let userInput = req.body;
+    console.log(userInput);
+    await userModel.create(userInput);
+    res.status(200).json({ msg: "User Data Registered! 💻" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: error });
+  }
+});
+
+3. test it in postman and check if it gets updated in the database
+
+(i hope i didnt forget anything in these steps)
+
+
+
 
 
 
