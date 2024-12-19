@@ -268,7 +268,7 @@ export default userModel;
 2. Now come back to the controllers folders ; inside it (since this is the user model, im in users/index.js)
 import userModel from "../../models/Users/Users.js";
 
-//creating a register api using create method(insertOne)
+//creating a register api using create method(insertOne in mongoDB shell)
 router.post("/register", async (req, res) => {
   try {
     let userInput = req.body;
