@@ -229,7 +229,6 @@ app.listen(PORT, () => {
 ...
 
 VI. Model Setup:
-
 1. Now im working with models folder ; make sure you have the necessary subfolders Admin, Staff, Users
 and inside them their respective .js file (Admin.js, Index.js, Staff.js)
 {inside these 3 subfolders we will be defining the schema, model and export default model}
@@ -286,6 +285,148 @@ router.post("/register", async (req, res) => {
 (i hope i didnt forget anything in these steps)
 (if i missed anything then 
 https://github.com/saadhn4/mongooseSetup -> this repository i can follow from models and controllers folder ; were mainly working with these both)
+
+
+---------------------------------------Following along with class---------------------------------------------------------
+
+ALL API's!!!!!!!!!
+
+//1. Get all api
+
+API method: Get all
+Route: /getall
+API Name: Get all users
+
+router.get("/getall, async (req,res) => {
+  try{
+    //this is db.collectionName.find
+    let allUsers= await userModel.find({})
+    res.status(200).json(allUsers)
+
+  } catch (error){
+    console.log(error)
+    res.status(500).json({msg: error})
+  }
+})
+
+//2. Get one api
+
+API method: Get one
+Route: /getone
+API Name: Get one user
+
+router.get("/getone, async (req,res) => {
+  try{
+    //this is db.collectionName.find
+    let user= await userModel.find({firstName:"Saad"})
+    res.status(200).json(user)
+
+  } catch (error){
+    console.log(error)
+    res.status(500).json({msg: error})
+  }
+})
+
+//3. Post
+
+API method: Post
+Route: /register
+API Name: Registering user
+
+router.post("/register, async (req,res) => {
+  try{
+    let userInput = req.body;
+    console.log(userInput)
+    await userModel.create(userInput)
+
+    //res.status(201) because user created (check http methods in https://github.com/saadhn4/expressJS/blob/main/express-notes.txt)
+
+    res.status(201).json({msg: "User added succesfully"})
+
+  } catch (error){
+    console.log(error)
+    res.status(500).json({msg: error})
+  }
+})
+
+//4. Put
+
+API method: Put
+Route: /update/:phone (using req.params)
+API Name: Update user
+
+
+router.put("/update/:phone", (req,res) => {
+  try{
+    let userPhone = req.params.phone;
+    let userData = req.body;
+    console.log(userPhone)
+    await userModel.findOneAndUpdate({phone: userPhone},{$set: userData},{new: true})
+    res.status(200).json({msg: "User updated succesfully"})
+  }
+  catch(error){
+    console.log(error)
+  }
+})
+
+//5. delete
+
+API method: Delete
+Route: /delete/:email 
+API Name: Delete user
+
+router.delete("/delete/:phone, async (req,res) => {
+  try{
+    let userPhone = req.params.phone
+    console.log(userPhone)
+    await userModel.deleteOne({phone: userPhone})
+    res.status(200).json({msg: "User deleted succesfully"})
+
+  } catch (error){
+    console.log(error)
+    res.status(500).json({msg: error})
+  }
+})
+
+//6. delete
+
+API method: Delete
+Route: /deleteall
+API Name: Delete all Users
+This api will delete all user collections
+
+router.delete("/deletall, async (req,res) =>{
+  try{
+    await userModel.deleteMany({})//this deletes all documents in database
+    or
+    await userModel.deleteMany({name: "Saad"}) // deletes documents of all people with name Saad
+
+  } catch (error){
+    console.log(error)
+    res.status(500).json({msg: error})
+  }
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
