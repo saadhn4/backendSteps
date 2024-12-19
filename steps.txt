@@ -372,7 +372,7 @@ router.put("/update/:phone", (req,res) => {
 //5. delete
 
 API method: Delete
-Route: /delete/:email 
+Route: /delete/:phone
 API Name: Delete user
 
 router.delete("/delete/:phone, async (req,res) => {
